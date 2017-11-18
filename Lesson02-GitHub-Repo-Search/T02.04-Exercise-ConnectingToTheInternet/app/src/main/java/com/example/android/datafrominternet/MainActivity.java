@@ -53,15 +53,18 @@ public class MainActivity extends AppCompatActivity {
      * our (not yet created) {@link GithubQueryTask}
      */
     private void makeGithubSearchQuery() {
+        String response = "";
         String githubQuery = mSearchBoxEditText.getText().toString();
         URL githubSearchUrl = NetworkUtils.buildUrl(githubQuery);
-        mUrlDisplayTextView.setText(githubSearchUrl.toString());
 
         try {
-            String response = NetworkUtils.getResponseFromHttpUrl(githubSearchUrl);
+            response = NetworkUtils.getResponseFromHttpUrl(githubSearchUrl);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        mUrlDisplayTextView.setText(response);
+
     }
 
     @Override
