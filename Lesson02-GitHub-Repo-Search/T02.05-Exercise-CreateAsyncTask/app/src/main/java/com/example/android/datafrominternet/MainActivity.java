@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         String githubSearchResults = null;
 
         new GithubQueryTask().execute(githubSearchUrl);
-        
+
     }
 
     @Override
