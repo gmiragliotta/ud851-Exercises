@@ -22,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android.datafrominternet.utilities.NetworkUtils;
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView mErrorMessageTextView;
 
-    // TODO (24) Create a ProgressBar variable to store a reference to the ProgressBar
+    private ProgressBar mLoadingIndicatorProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +53,8 @@ public class MainActivity extends AppCompatActivity {
         mSearchResultsTextView = (TextView) findViewById(R.id.tv_github_search_results_json);
 
         mErrorMessageTextView = (TextView) findViewById(R.id.tv_error_message_display);
-        // TODO (25) Get a reference to the ProgressBar using findViewById
+
+        mLoadingIndicatorProgressBar = (ProgressBar) findViewById(R.id.pb_loading_indicator);
     }
 
     /**
@@ -80,7 +82,10 @@ public class MainActivity extends AppCompatActivity {
 
     public class GithubQueryTask extends AsyncTask<URL, Void, String> {
 
-        // TODO (26) Override onPreExecute to set the loading indicator to visible
+        @Override
+        protected void onPreExecute() {
+            mLoadingIndicatorProgressBar.setVisibility(View.VISIBLE);
+        }
 
         @Override
         protected String doInBackground(URL... params) {
@@ -96,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String githubSearchResults) {
-            // TODO (27) As soon as the loading is complete, hide the loading indicator
+            mLoadingIndicatorProgressBar.setVisibility(View.INVISIBLE);
             if (githubSearchResults != null && !githubSearchResults.equals("")) {
                 if(githubSearchResults != null && githubSearchResults != "") {
                     showJsonDataView();
