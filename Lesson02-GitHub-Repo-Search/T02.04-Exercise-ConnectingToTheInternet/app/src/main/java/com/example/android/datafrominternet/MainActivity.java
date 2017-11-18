@@ -56,14 +56,14 @@ public class MainActivity extends AppCompatActivity {
         String response = "";
         String githubQuery = mSearchBoxEditText.getText().toString();
         URL githubSearchUrl = NetworkUtils.buildUrl(githubQuery);
-
+        mUrlDisplayTextView.setText(githubSearchUrl);
         try {
             response = NetworkUtils.getResponseFromHttpUrl(githubSearchUrl);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        mUrlDisplayTextView.setText(response);
+        mSearchResultsTextView.setText(response);
 
     }
 
