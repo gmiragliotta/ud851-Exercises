@@ -98,10 +98,15 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String githubSearchResults) {
             // TODO (27) As soon as the loading is complete, hide the loading indicator
             if (githubSearchResults != null && !githubSearchResults.equals("")) {
-                // TODO (17) Call showJsonDataView if we have valid, non-null results
+                if(githubSearchResults != null && githubSearchResults != "") {
+                    showJsonDataView();
+                }
                 mSearchResultsTextView.setText(githubSearchResults);
             }
-            // TODO (16) Call showErrorMessage if the result is null in onPostExecute
+
+            if(githubSearchResults == null) {
+                showErrorMessage();
+            }
         }
     }
 
