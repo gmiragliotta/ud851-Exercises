@@ -134,7 +134,7 @@ public class GreenAdapter extends RecyclerView.Adapter<GreenAdapter.NumberViewHo
             listItemNumberView.setText(String.format(Locale.getDefault(), "%d", listIndex));
         }
     }
-    
+
     // Complete (13) Within NumberViewHolder, create a TextView variable called listItemNumberView
 
     // Complete (14) Create a constructor for NumberViewHolder that accepts a View called itemView as a parameter
