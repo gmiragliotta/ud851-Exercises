@@ -92,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
     // Complete (12) If the ID equals R.id.action_refresh, create and set a new adapter on the RecyclerView and return true
     // Complete (13) For now, for all other IDs, return super.onOptionsItemSelected
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
@@ -103,7 +102,6 @@ public class MainActivity extends AppCompatActivity {
 
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }
