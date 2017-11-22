@@ -42,7 +42,7 @@
         android:id="@+id/tv_view_holder_instance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:style="@style/TextAppearance.AppCompat.Title"
+        style="@style/TextAppearance.AppCompat.Title"
         android:layout_gravity="center_vertical|end"
         android:fontFamily="monospace"
         android:textColor="#000" />
