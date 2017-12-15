@@ -15,7 +15,6 @@
  */
 package com.example.android.asynctaskloader;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
@@ -28,6 +27,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.asynctaskloader.utilities.NetworkUtils;
 
@@ -40,9 +40,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     /* A constant to save and restore the URL that is being displayed */
     private static final String SEARCH_QUERY_URL_EXTRA = "query";
 
-    // TODO (28) Remove the key for storing the search results JSON
-    /* A constant to save and restore the JSON that is being displayed */
-    private static final String SEARCH_RESULTS_RAW_JSON = "results";
+    // Complete (28) Remove the key for storing the search results JSON
 
     // Complete (2) Create a constant int to uniquely identify your loader. Call it GITHUB_SEARCH_LOADER
     private static final int GITHUB_SEARCH_LOADER = 28;
@@ -73,15 +71,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         if (savedInstanceState != null) {
             String queryUrl = savedInstanceState.getString(SEARCH_QUERY_URL_EXTRA);
 
-            // TODO (26) Remove the code that retrieves the JSON
-            String rawJsonSearchResults = savedInstanceState.getString(SEARCH_RESULTS_RAW_JSON);
+            // Complete (26) Remove the code that retrieves the JSON
 
             mUrlDisplayTextView.setText(queryUrl);
-            // TODO (25) Remove the code that displays the JSON
-            mSearchResultsTextView.setText(rawJsonSearchResults);
+            // Complete (25) Remove the code that displays the JSON
         }
 
-        // TODO (24) Initialize the loader with GITHUB_SEARCH_LOADER as the ID, null for the bundle, and this for the context
+        // Complete (24) Initialize the loader with GITHUB_SEARCH_LOADER as the ID, null for the bundle, and this for the context
+        getSupportLoaderManager().initLoader(GITHUB_SEARCH_LOADER, null, this);
     }
 
     /**
@@ -92,20 +89,33 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private void makeGithubSearchQuery() {
         String githubQuery = mSearchBoxEditText.getText().toString();
 
-        // TODO (17) If no search was entered, indicate that there isn't anything to search for and return
+        // Complete (17) If no search was entered, indicate that there isn't anything to search for and return
+        if(TextUtils.isEmpty(githubQuery)) {
+            Toast.makeText(this, "Anything to search for.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         URL githubSearchUrl = NetworkUtils.buildUrl(githubQuery);
         mUrlDisplayTextView.setText(githubSearchUrl.toString());
 
-        // TODO (18) Remove the call to execute the AsyncTask
-        new GithubQueryTask().execute(githubSearchUrl);
+        // Complete (18) Remove the call to execute the AsyncTask
 
-        // TODO (19) Create a bundle called queryBundle
-        // TODO (20) Use putString with SEARCH_QUERY_URL_EXTRA as the key and the String value of the URL as the value
+        // Complete (19) Create a bundle called queryBundle
+        // Complete (20) Use putString with SEARCH_QUERY_URL_EXTRA as the key and the String value of the URL as the value
+        Bundle queryBundle = new Bundle();
+        queryBundle.putString(SEARCH_QUERY_URL_EXTRA, githubQuery);
 
-        // TODO (21) Call getSupportLoaderManager and store it in a LoaderManager variable
-        // TODO (22) Get our Loader by calling getLoader and passing the ID we specified
-        // TODO (23) If the Loader was null, initialize it. Else, restart it.
+        // Complete (21) Call getSupportLoaderManager and store it in a LoaderManager variable
+        // Complete (22) Get our Loader by calling getLoader and passing the ID we specified
+        // Complete (23) If the Loader was null, initialize it. Else, restart it.
+        LoaderManager mLoaderManager = getSupportLoaderManager();
+        Loader<String> mLoader = mLoaderManager.getLoader(GITHUB_SEARCH_LOADER);
+
+        if(mLoader == null) {
+            mLoaderManager.initLoader(GITHUB_SEARCH_LOADER, queryBundle, this);
+        } else {
+            mLoaderManager.restartLoader(GITHUB_SEARCH_LOADER, queryBundle, this);
+        }
     }
 
     /**
@@ -177,6 +187,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 mLoadingIndicator.setVisibility(View.VISIBLE);
 
                 // Complete (8) Force a load
+                forceLoad();
                 // END - onStartLoading
             }
         };
@@ -206,43 +217,9 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoaderReset(Loader<String> loader) {
 
-
     }
 
-
-
-    // TODO (29) Delete the AsyncTask class
-    public class GithubQueryTask extends AsyncTask<URL, Void, String> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            mLoadingIndicator.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected String doInBackground(URL... params) {
-            URL searchUrl = params[0];
-            String githubSearchResults = null;
-            try {
-                githubSearchResults = NetworkUtils.getResponseFromHttpUrl(searchUrl);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return githubSearchResults;
-        }
-
-        @Override
-        protected void onPostExecute(String githubSearchResults) {
-
-            if (githubSearchResults != null && !githubSearchResults.equals("")) {
-                showJsonDataView();
-                mSearchResultsTextView.setText(githubSearchResults);
-            } else {
-                showErrorMessage();
-            }
-        }
-    }
+    // Complete (29) Delete the AsyncTask class
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -267,8 +244,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         String queryUrl = mUrlDisplayTextView.getText().toString();
         outState.putString(SEARCH_QUERY_URL_EXTRA, queryUrl);
 
-        // TODO (27) Remove the code that persists the JSON
-        String rawJsonSearchResults = mSearchResultsTextView.getText().toString();
-        outState.putString(SEARCH_RESULTS_RAW_JSON, rawJsonSearchResults);
+        // Complete (27) Remove the code that persists the JSON
     }
 }
