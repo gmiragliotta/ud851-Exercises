@@ -27,9 +27,9 @@ import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceScreen;
 import android.widget.Toast;
 
-// TODO (1) Implement OnPreferenceChangeListener
+// Complete (1) Implement OnPreferenceChangeListener
 public class SettingsFragment extends PreferenceFragmentCompat implements
-        OnSharedPreferenceChangeListener {
+        OnSharedPreferenceChangeListener, Preference.OnPreferenceChangeListener {
 
     @Override
     public void onCreatePreferences(Bundle bundle, String s) {
@@ -46,13 +46,17 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
             Preference p = prefScreen.getPreference(i);
             // You don't need to set up preference summaries for checkbox preferences because
             // they are already set up in xml using summaryOff and summary On
-            if (!(p instanceof CheckBoxPreference)) {
+            if (p instanceof ListPreference) {
                 String value = sharedPreferences.getString(p.getKey(), "");
                 setPreferenceSummary(p, value);
+            } else if (p instanceof EditTextPreference) {
+                p.setOnPreferenceChangeListener(this);
             }
         }
-        // TODO (3) Add the OnPreferenceChangeListener specifically to the EditTextPreference
+        // Complete (3) Add the OnPreferenceChangeListener specifically to the EditTextPreference
+
     }
+
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
@@ -88,10 +92,26 @@ public class SettingsFragment extends PreferenceFragmentCompat implements
         }
     }
 
-    // TODO (2) Override onPreferenceChange. This method should try to convert the new preference value
+    // Complete (2) Override onPreferenceChange. This method should try to convert the new preference value
     // to a float; if it cannot, show a helpful error message and return false. If it can be converted
     // to a float check that that float is between 0 (exclusive) and 3 (inclusive). If it isn't, show
     // an error message and return false. If it is a valid number, return true.
+    @Override
+    public boolean onPreferenceChange(Preference preference, Object newValue) {
+        Toast errorToast = Toast.makeText(getContext(), "Invalid input!", Toast.LENGTH_SHORT);
+        try {
+            Float value = Float.parseFloat((String) newValue);
+            if(value > 0 && value <= 3) {
+                return true;
+            } else {
+                errorToast.show();
+            }
+        } catch (ClassCastException | NumberFormatException e) {
+            errorToast.show();
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
